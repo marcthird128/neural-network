@@ -5,6 +5,10 @@ import json
 import random
 import math
 
+# linear
+def linear(x):
+	return x
+
 # ReLU
 def relu(x):
 	if x>0: return x
@@ -21,8 +25,6 @@ def load_config():
 	config = config_file.read()
 	config = json.loads(config)
 	config_file.close()
-	if config["network"]["activation"] == "relu": activation = relu
-	else: activation = sigmoid
 	print("Loaded config")
 
 # initialize network
@@ -70,7 +72,7 @@ def save():
 	print("Saved network")
 
 # calculate one layer
-def calculate_layer(neurons, inp):
+def calculate_layer(neurons, inp, activation):
 	output = []
 	for weights in neurons:
 		result = weights[0]
@@ -92,7 +94,10 @@ def propogate(inp):
 		if dat["type"] == "input":
 			output = inp
 		else:
-			output = calculate_layer(net[i-1], output)			
+			activation = linear
+			if dat["activation"] == "relu": activation = relu
+			elif dat["activation"] == "sigmoid": activation = sigmoid
+			output = calculate_layer(net[i-1], output, activation)			
 			
 	return output
 

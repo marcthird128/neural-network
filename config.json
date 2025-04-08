@@ -2,7 +2,6 @@
     "name": "Neural Network 1.0.0",
     "network": {
         "location": "network.json",
-        "activation": "relu",
         "learningRate": 0.001,
         "layers": [
             {
@@ -11,18 +10,22 @@
             },
             {
                 "type": "hidden",
+				"activation": "relu",
                 "size": 20
             },
             {
                 "type": "hidden",
+				"activation": "relu",
                 "size": 10
             },
             {
                 "type": "hidden",
+				"activation": "relu",
                 "size": 5
             },
             {
                 "type": "output",
+				"activation": "linear",
                 "size": 1
             }
         ]
