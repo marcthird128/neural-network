@@ -2,7 +2,7 @@
     "name": "Neural Network 1.0.0",
     "network": {
         "location": "network.json",
-        "activation": "ReLU",
+        "activation": "relu",
         "learningRate": 0.001,
         "layers": [
             {

@@ -3,14 +3,26 @@
 # imports
 import json
 import random
+import math
+
+# ReLU
+def relu(x):
+	if x>0: return x
+	else: return 0
+
+# sigmoid
+def sigmoid(x):
+	return 1 / (1 + math.exp(-x))
 
 # load the config file
 def load_config():
-	global config
+	global config, activation
 	config_file = open('config.json', 'r')
 	config = config_file.read()
 	config = json.loads(config)
 	config_file.close()
+	if config["network"]["activation"] == "relu": activation = relu
+	else: activation = sigmoid
 	print("Loaded config")
 
 # initialize network
@@ -62,10 +74,11 @@ def calculate_layer(neurons, inp):
 	output = []
 	for weights in neurons:
 		result = weights[0]
-		weights = weights[1:-1]
+		weights = weights[1:]
 		for i in range(len(weights)):
-			print(round(result, 4), end=",")
 			result += weights[i] * inp[i]
+		result = activation(result)
+		print(round(result, 4), end=", ")
 		output.append(result)
 	print("\n")
 	return output
@@ -124,7 +137,7 @@ while True:
 		save()
 	
 	elif args[0] == "prop":
-		values = list(map(float, args[1:-1]))
+		values = list(map(float, args[1:]))
 		output = propogate(values)
 		print("Output:")
 		for out in output: print(out)
