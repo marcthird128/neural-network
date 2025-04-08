@@ -2,6 +2,7 @@
 
 # imports
 import json
+import random
 
 # load the config file
 def load_config():
@@ -12,15 +13,47 @@ def load_config():
 	config_file.close()
 	print("Loaded config")
 
-# save the config
-def save_config():
-	config_file = open('config.json', 'w')
-	config_file.write(json.dumps(config, indent=4))
-	print("Saved config")
-
 # initialize network
-def init_net():
+# each layer is a list. Each element
+# in this list is a list of weights
+# to the neurons in the previous layer,
+# with the bias prepended
+def init():
+	global net
+	net = []
+	layerDat = config["network"]["layers"]
+	lastDat = {}
+	for dat in layerDat:
+		lastDat = dat
+		if dat["type"] == "input": continue
+		neurons = [] # array of weights
+		for i in range(dat["size"]):
+			weights = [random.random()] # bias added first
+			
+			# random weights
+			for j in range(lastDat["size"]):
+				weights.append(random.random())
+			neurons.append(weights)
+			
+		net.append(neurons)
+	
 	print("Initialized netowrk")
+
+# load net from file
+def load():
+	global net
+	net_file = open(config["network"]["location"], 'r')
+	net = net_file.read()
+	net = json.loads(net)
+	net_file.close()
+	print("Loaded network")
+
+# save net to file
+def save():
+	net_file = open(config["network"]["location"], 'w')
+	net_file.write(json.dumps(net, indent=3))
+	net_file.close()
+	print("Saved network")
 
 # set up
 load_config()
@@ -47,7 +80,7 @@ while True:
 		print("config: reload config")
 		print("init: initialize neural network randomly")
 		print("load: load network")
-		print("init: save network")
+		print("save: save network")
 		
 	elif args[0] == "config":
 		load_config()
