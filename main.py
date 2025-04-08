@@ -3,10 +3,55 @@
 # imports
 import json
 
-# open configuration file
-config_file = open('config.json', 'r')
-config = config_file.read()
-config = json.loads(config);
+# load the config file
+def load_config():
+	global config
+	config_file = open('config.json', 'r')
+	config = config_file.read()
+	config = json.loads(config)
+	config_file.close()
+	print("Loaded config")
 
-# print initial message
-print(config['name']);
+# save the config
+def save_config():
+	config_file = open('config.json', 'w')
+	config_file.write(json.dumps(config, indent=4))
+	print("Saved config")
+
+# initialize network
+def init_net():
+	print("Initialized netowrk")
+
+# set up
+load_config()
+print(config['name'])
+print("")
+print("Enter commands. type 'help' for help")
+
+# loop with a command line interface
+while True:
+	print("")
+	command = input("> ")
+	print("")
+	args = command.split()
+	
+	if args[0] == "exit":
+		print("Exited")
+		break
+		
+	elif args[0] == "help":
+		print("Commands:")
+		print("")
+		print("exit: exit the script")
+		print("help: show this menu")
+		print("config: reload config")
+		print("init: initialize neural network randomly")
+		
+	elif args[0] == "config":
+		load_config()
+			
+	elif args[0] == "init":
+		init()
+		
+	else:
+		print("Unknown command. Type 'help' for help")
