@@ -46,12 +46,20 @@ while True:
 		print("help: show this menu")
 		print("config: reload config")
 		print("init: initialize neural network randomly")
+		print("load: load network")
+		print("init: save network")
 		
 	elif args[0] == "config":
 		load_config()
 			
 	elif args[0] == "init":
 		init()
+	
+	elif args[0] == "load":
+		load()
+	
+	elif args[0] == "save":
+		save()
 		
 	else:
 		print("Unknown command. Type 'help' for help")
