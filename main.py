@@ -24,8 +24,9 @@ def init():
 	layerDat = config["network"]["layers"]
 	lastDat = {}
 	for dat in layerDat:
-		lastDat = dat
-		if dat["type"] == "input": continue
+		if dat["type"] == "input": 
+			lastDat = dat
+			continue
 		neurons = [] # array of weights
 		for i in range(dat["size"]):
 			weights = [random.random()] # bias added first
@@ -36,6 +37,7 @@ def init():
 			neurons.append(weights)
 			
 		net.append(neurons)
+		lastDat = dat
 	
 	print("Initialized netowrk")
 
@@ -54,6 +56,32 @@ def save():
 	net_file.write(json.dumps(net, indent=3))
 	net_file.close()
 	print("Saved network")
+
+# calculate one layer
+def calculate_layer(neurons, inp):
+	output = []
+	for weights in neurons:
+		result = weights[0]
+		weights = weights[1:-1]
+		for i in range(len(weights)):
+			print(round(result, 4), end=",")
+			result += weights[i] * inp[i]
+		output.append(result)
+	print("\n")
+	return output
+
+# propogate the network
+def propogate(inp):
+	layerDat = config["network"]["layers"]
+	output = []
+	for i in range(len(layerDat)):
+		dat = layerDat[i]
+		if dat["type"] == "input":
+			output = inp
+		else:
+			output = calculate_layer(net[i-1], output)			
+			
+	return output
 
 # set up
 load_config()
@@ -81,6 +109,7 @@ while True:
 		print("init: initialize neural network randomly")
 		print("load: load network")
 		print("save: save network")
+		print("prop ...inputs: propogate network")
 		
 	elif args[0] == "config":
 		load_config()
@@ -93,6 +122,12 @@ while True:
 	
 	elif args[0] == "save":
 		save()
+	
+	elif args[0] == "prop":
+		values = list(map(float, args[1:-1]))
+		output = propogate(values)
+		print("Output:")
+		for out in output: print(out)
 		
 	else:
 		print("Unknown command. Type 'help' for help")
