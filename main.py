@@ -128,8 +128,6 @@ while True:
 		print("load: load network")
 		print("save: save network")
 		print("prop ...inputs: propogate network")
-		print("back ...inputs , ...targetOutputs: backpropogate network")
-		print("train iterations: train netowrk")
 		
 	elif args[0] == "config":
 		load_config()
